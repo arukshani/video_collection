@@ -49,8 +49,28 @@ function extractStringFromClass(className) {
 }
 
 /* Schedules periodic extraction of the information */
+// function simulateCtrlShiftAltD() {
+// 	var element = document.body;
+
+// 	function keyEvent(el, ev) {
+// 		var eventObj = document.createEvent("Events");
+// 		eventObj.initEvent(ev, true, true);
+
+// 		eventObj.keyCode = 68;
+// 		eventObj.which = 68;
+// 		eventObj.ctrlKey = true;
+// 		eventObj.shiftKey = true;
+// 		eventObj.altKey = true;
+
+// 		el.dispatchEvent(eventObj);
+// 	}
+
+// 	keyEvent(element, "keydown");
+// 	keyEvent(element, "keypress");
+// 	keyEvent(element, "keyup");
+// }
+
 function simulateCtrlShiftAltD() {
-	var element = document.body;
 
 	function keyEvent(el, ev) {
 		var eventObj = document.createEvent("Events");
@@ -61,13 +81,22 @@ function simulateCtrlShiftAltD() {
 		eventObj.ctrlKey = true;
 		eventObj.shiftKey = true;
 		eventObj.altKey = true;
-
-		el.dispatchEvent(eventObj);
+        // element.addEventListener("DOMContentLoaded", function(event) {
+        //     // console.log("DOM fully loaded and parsed");
+        //     console.log(el);
+        //     el.dispatchEvent(eventObj);
+        //  });
+        el.dispatchEvent(eventObj);
+		
 	}
-
-	keyEvent(element, "keydown");
-	keyEvent(element, "keypress");
-	keyEvent(element, "keyup");
+    document.addEventListener("DOMContentLoaded", function(event) {
+        var element = document.body;
+        console.log("DOM fully loaded and parsed");
+        keyEvent(element, "keydown");
+	    keyEvent(element, "keypress");
+	    keyEvent(element, "keyup");
+    });
+	
 }
 
 function extractMovieID() {
@@ -241,7 +270,10 @@ chrome.runtime.onMessage.addListener(
             checkPageUpdate();
         } else if(request.message === "general_page_reloaded") {
             if ( document.URL.includes('netflix.com/watch') ) {
-                startRecording();
+                document.addEventListener("DOMContentLoaded", function(event) {
+                    console.log("general_page_reloaded")
+                    startRecording();
+                });
             }
         } else {
             console.log("Received message ", request.message)
@@ -250,5 +282,8 @@ chrome.runtime.onMessage.addListener(
 );
 
 if ( document.URL.includes('netflix.com/watch') ) {
-    startRecording();
+    document.addEventListener("DOMContentLoaded", function(event) {
+        console.log("general_page_reloaded")
+        startRecording();
+    });
 }

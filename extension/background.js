@@ -12,5 +12,6 @@ chrome.runtime.onMessage.addListener(
             x = document.getElementById("current_movie");
             x.innerHTML = request.movie_id;
 		}
+		// return true;
 	}
 );

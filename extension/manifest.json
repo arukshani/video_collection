@@ -42,7 +42,6 @@
     "background",
     "storage",
     "unlimitedStorage",
-    "https://muse.inria.fr/nfytextension/uploads",
     "http://127.0.0.1:19282/",
     "<all_urls>",
     "webRequest"
@@ -62,5 +61,8 @@
       "index.js"
     ]
   },
-  "options_page": "options.html"
+  "options_page": "options.html",
+  "web_accessible_resources": [
+    "*.json", "*.js", "*.*"
+  ]
 }
