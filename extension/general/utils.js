@@ -20,7 +20,7 @@ function hashcode(str) {
 }
 
 function simulateCtrlShiftAltD() {
-    // console.log("simulateCtrlShiftAltD");
+    console.log("simulateCtrlShiftAltD");
 	function keyEvent(el, ev) {
 		var eventObj = document.createEvent("Events");
 		eventObj.initEvent(ev, true, true);

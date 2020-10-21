@@ -119,7 +119,9 @@ function periodicClassQuerying(className, period) {
 
 function startTracking(className, period, periodAfter, ts) {
     //Inject key
+    console.log("startTracking")
     if (!recording) 
+        console.log("Simple return")
         return;
     var script = document.createElement('script');
     // script.textContent = "(" + simulateCtrlShiftAltD.toString() + ")();";
@@ -273,6 +275,7 @@ chrome.runtime.onMessage.addListener(
             checkPageUpdate();
         } else if(request.message === "general_page_reloaded") {
             if ( document.URL.includes('netflix.com/watch') ) {
+                console.log("Hello2")
                 document.addEventListener("DOMContentLoaded", function(event) {
                     console.log("general_page_reloaded")
                     startRecording();
@@ -286,6 +289,7 @@ chrome.runtime.onMessage.addListener(
 );
 
 if ( document.URL.includes('netflix.com/watch') ) {
+    console.log("Hello1")
     document.addEventListener("DOMContentLoaded", function(event) {
         console.log("b4 startRecording")
         startRecording();

@@ -58,8 +58,7 @@
       "general/video_utils.js",
       "netflix/netflix_utils.js",
       "youtube/youtube_utils.js",
-      "index.js",
-      "netflix/script.js"
+      "index.js"
     ]
   },
   "options_page": "options.html",
