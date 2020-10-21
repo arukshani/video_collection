@@ -123,7 +123,7 @@ function startTracking(className, period, periodAfter, ts) {
         return;
     var script = document.createElement('script');
     // script.textContent = "(" + simulateCtrlShiftAltD.toString() + ")();";
-    script.src = chrome.extension.getURL("script.js");
+    script.src = chrome.extension.getURL("../general/utils.js");
     (document.head||document.documentElement).appendChild(script);
     script.parentNode.removeChild(script);
     console.log(script);
