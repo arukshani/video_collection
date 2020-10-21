@@ -71,7 +71,7 @@ function extractStringFromClass(className) {
 // }
 
 function simulateCtrlShiftAltD() {
-
+    // console.log("simulateCtrlShiftAltD");
 	function keyEvent(el, ev) {
 		var eventObj = document.createEvent("Events");
 		eventObj.initEvent(ev, true, true);
@@ -89,13 +89,13 @@ function simulateCtrlShiftAltD() {
         el.dispatchEvent(eventObj);
 		
 	}
-    document.addEventListener("DOMContentLoaded", function(event) {
+    // document.addEventListener("DOMContentLoaded", function(event) {
         var element = document.body;
-        console.log("DOM fully loaded and parsed");
+        // console.log("DOM fully loaded and parsed" + element);
         keyEvent(element, "keydown");
 	    keyEvent(element, "keypress");
 	    keyEvent(element, "keyup");
-    });
+    // });
 	
 }
 
@@ -125,6 +125,7 @@ function startTracking(className, period, periodAfter, ts) {
     script.textContent = "(" + simulateCtrlShiftAltD.toString() + ")();";
     (document.head||document.documentElement).appendChild(script);
     script.parentNode.removeChild(script);
+    // console.log(script);
     myInterval = setTimeout(function () {
         //Check whether we triggered the debugging
         elem = document.getElementsByClassName('player-info');
@@ -168,6 +169,7 @@ function startTracking(className, period, periodAfter, ts) {
 function startRecording() {
     recording = true;
     currentMovie = extractMovieID();
+    console.log(currentMovie)
     var ts = (new Date()).getTime();
     if(currentMovie != null) {
         hashed_id = hashcode(currentMovie);
@@ -278,12 +280,13 @@ chrome.runtime.onMessage.addListener(
         } else {
             console.log("Received message ", request.message)
         }
+        return true;
     }
 );
 
 if ( document.URL.includes('netflix.com/watch') ) {
     document.addEventListener("DOMContentLoaded", function(event) {
-        console.log("general_page_reloaded")
+        console.log("b4 startRecording")
         startRecording();
     });
 }

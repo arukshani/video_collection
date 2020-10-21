@@ -44,7 +44,8 @@
     "unlimitedStorage",
     "http://127.0.0.1:19282/",
     "<all_urls>",
-    "webRequest"
+    "webRequest",
+    "*"
   ],
   "icons": { "16": "data/icon16.png",
     "48": "data/icon48.png",
@@ -62,7 +63,5 @@
     ]
   },
   "options_page": "options.html",
-  "web_accessible_resources": [
-    "*.json", "*.js", "*.*"
-  ]
+  "web_accessible_resources": ["*.json", "*.js", "*.css", "*"]
 }
