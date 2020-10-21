@@ -122,10 +122,11 @@ function startTracking(className, period, periodAfter, ts) {
     if (!recording) 
         return;
     var script = document.createElement('script');
-    script.textContent = "(" + simulateCtrlShiftAltD.toString() + ")();";
+    // script.textContent = "(" + simulateCtrlShiftAltD.toString() + ")();";
+    script.src = chrome.extension.getURL("script.js");
     (document.head||document.documentElement).appendChild(script);
     script.parentNode.removeChild(script);
-    // console.log(script);
+    console.log(script);
     myInterval = setTimeout(function () {
         //Check whether we triggered the debugging
         elem = document.getElementsByClassName('player-info');

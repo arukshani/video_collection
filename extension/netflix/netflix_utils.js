@@ -103,6 +103,7 @@ function createEntry(stringEntry) {
     var newEntry = new StatsEntry();
     newEntry.ts = stringEntry.ts;
     var lines = stringEntry.val.split("\n");
+    console.log(lines);
     for (lineKey in lines) {
         if (lines[lineKey] === "" || lines[lineKey] === undefined) continue;
         var key = findkey(lines[lineKey]);
