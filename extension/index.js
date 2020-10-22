@@ -346,6 +346,7 @@ function finishedRecordingHulu(movie_id, end_ts, tabId) {
 
 chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {
+        console.log("HELLLOoooooooo" + request.message);
         if (request.message === "netflix_stats") {
             var movie = netflix_dataset[request.movie_id];
             if(movie.values.length > 0 &&
@@ -504,6 +505,8 @@ chrome.runtime.onMessage.addListener(
         } else if (request.message === "get_tab_id") {
             sendResponse(sender.tab.id);
         }
+        sendResponse({});
+        return true;
     }
 );
 

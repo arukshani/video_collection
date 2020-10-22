@@ -250,6 +250,8 @@ chrome.runtime.onMessage.addListener(
                 trackVideoTag(5, 1000, 0, htmlplayer, myInterval, startRecording);
             }
         }
+        sendResponse({});
+        return true;
     }
 );
 

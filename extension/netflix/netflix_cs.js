@@ -89,52 +89,69 @@ function simulateCtrlShiftAltD() {
         el.dispatchEvent(eventObj);
 		
 	}
-    document.addEventListener("DOMContentLoaded", function(event) {
+    // document.addEventListener("DOMContentLoaded", function(event) {
         var element = document.body;
-        console.log("DOM fully loaded and parsed");
+        // console.log("DOM fully loaded and parsed");
         keyEvent(element, "keydown");
 	    keyEvent(element, "keypress");
 	    keyEvent(element, "keyup");
-    });
+    // });
 	
 }
 
 function extractMovieID() {
+    console.log("extract movie id");
     path = window.location.pathname.split("/");
-    if (path.length > 2 && path[1] === "watch")
+    console.log("path:"+path);
+    if (path.length > 2 && path[1] === "watch") {
+        console.log("return path:"+path[2]);
         return path[2];
-    else
+    }
+    else{
+        console.log("return null:");
         return null;
+    }
 }
 
 function periodicClassQuerying(className, period) {
-    if(!recording) return;
+    if(!recording) {
+        console.log("not recording")
+        return;
+    }
     if(!extractStringFromClass(className)) {
+        console.log("set recoding to false" + className)
         recording = false;
     }
     myInterval = setTimeout(function() {
+        console.log("try again" + className)
         periodicClassQuerying(className, period); // try again
     }, period);
 }
 
 function startTracking(className, period, periodAfter, ts) {
+    // console.log("Start tracking")
     //Inject key
-    if (!recording) 
+    if (!recording) {
+        console.log("not recording");
         return;
+    }
     var script = document.createElement('script');
     script.textContent = "(" + simulateCtrlShiftAltD.toString() + ")();";
+    // console.log(script)
     (document.head||document.documentElement).appendChild(script);
     script.parentNode.removeChild(script);
     myInterval = setTimeout(function () {
         //Check whether we triggered the debugging
         elem = document.getElementsByClassName('player-info');
         if (elem.length != 0) {
-            elem[0].style.display = 'none';       // Hide the text
-            //element.style.visibility = 'hidden';      // Hide
+            console.log(elem);
+            // elem[0].style.display = 'none';       // Hide the text
+            // element.style.visibility = 'hidden';      // Hide
 
             // The movie ID had not been extracted as it was clicked from the browser
             if(currentMovie == null) {
                 currentMovie = extractMovieID();
+                console.log("movie id:" + currentMovie);
                 hashed_id = hashcode(currentMovie);
                 chrome.runtime.sendMessage(
                     {
@@ -155,11 +172,13 @@ function startTracking(className, period, periodAfter, ts) {
                 movie_id: hashed_id,
                 ts: (new Date()).getTime()
             }, function (response) {
-                //console.log(response.message);
+                // console.log(response.message);
             });
 
             periodicClassQuerying(className, periodAfter);
+            // console.log("...periodicClassQuerying...")
         } else {
+            console.log("...startTracking...");
             startTracking(className, period, periodAfter, ts);
         }
     }, period);
@@ -233,7 +252,10 @@ function clickDetection(e) {
 
     if (isPlayClick(target)  && !recording) {
         console.log("Pressed play button while not playing");
-        startRecording();
+        document.addEventListener("DOMContentLoaded", function(event) {
+            // console.log("general_page_reloaded")
+            startRecording();
+        });
     } else if (isStopClick(target) && recording){
         console.log("Pressed back button while playing");
         stopRecording();
@@ -251,7 +273,10 @@ function checkPageUpdate() {
     newMovieId = extractMovieID();
     if(newMovieId !== null && newMovieId !== currentMovie) {
         console.log("A new page has been detected: " + document.URL);
-        startRecording();
+        document.addEventListener("DOMContentLoaded", function(event) {
+            // console.log("general_page_reloaded")
+            startRecording();
+        });
     } else {
         console.log("Still the old page: " + document.URL);
     }
@@ -263,6 +288,7 @@ myTabID = getTabID();
 
 chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {
+        console.log("In netflix_cs.js chrome.runtime.onMessage.addListener");
         if(request.message === "netflix_page_reloaded") {
             if(recording){
                 stopRecording();
@@ -278,12 +304,14 @@ chrome.runtime.onMessage.addListener(
         } else {
             console.log("Received message ", request.message)
         }
+        sendResponse({});
+        return true;
     }
 );
 
 if ( document.URL.includes('netflix.com/watch') ) {
     document.addEventListener("DOMContentLoaded", function(event) {
-        console.log("general_page_reloaded")
+        console.log("b4 startRecording")
         startRecording();
     });
 }
