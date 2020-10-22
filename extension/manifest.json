@@ -61,8 +61,5 @@
       "index.js"
     ]
   },
-  "options_page": "options.html",
-  "web_accessible_resources": [
-    "*.json", "*.js", "*.*"
-  ]
+  "options_page": "options.html"
 }

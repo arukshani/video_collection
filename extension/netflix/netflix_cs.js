@@ -27,13 +27,16 @@ function extractStringFromClass(className) {
     var x = document.getElementsByClassName(className);
     var i;
     if(x.length < 1) {
+        console.log("extractStringFromClass return false")
         return false;
     } else {
         try {
             dm = '\nisPlaying: false';
             dm = '\nisPlaying: '+String((document.getElementsByClassName('player-progress-val')[0].textContent === '100 %'));
         } catch (e) {}
-
+        // hashed_id = hashcode(currentMovie);
+        currentMovie = extractMovieID();
+        hashed_id = hashcode(currentMovie);
         chrome.runtime.sendMessage( { 
 	        	message: "netflix_stats", 
 				domString: document.getElementsByClassName(className)[0].children[0].value + dm,
@@ -123,7 +126,7 @@ function periodicClassQuerying(className, period) {
         recording = false;
     }
     myInterval = setTimeout(function() {
-        console.log("try again" + className)
+        console.log("try again>" + className)
         periodicClassQuerying(className, period); // try again
     }, period);
 }
@@ -151,7 +154,7 @@ function startTracking(className, period, periodAfter, ts) {
             // The movie ID had not been extracted as it was clicked from the browser
             if(currentMovie == null) {
                 currentMovie = extractMovieID();
-                console.log("movie id:" + currentMovie);
+                console.log("movie id from startTracking:" + currentMovie);
                 hashed_id = hashcode(currentMovie);
                 chrome.runtime.sendMessage(
                     {
@@ -187,9 +190,12 @@ function startTracking(className, period, periodAfter, ts) {
 function startRecording() {
     recording = true;
     currentMovie = extractMovieID();
+    console.log("movie id from startRecording:" + currentMovie);
     var ts = (new Date()).getTime();
     if(currentMovie != null) {
+        console.log("netflix_start from startRecording:" + currentMovie);
         hashed_id = hashcode(currentMovie);
+
         chrome.runtime.sendMessage(
             {
                 message: "netflix_start",
@@ -199,7 +205,8 @@ function startRecording() {
                 pageLoadTs: pageLoadTimestamp
             },
             function (response) {
-                //console.log(response.message);
+                // console.log("netflix_start reply" + response.message);
+                console.log("netflix_start reply" + response.message)
             });
     }
     startTracking("player-info", 5, 100, ts);
@@ -288,7 +295,7 @@ myTabID = getTabID();
 
 chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {
-        console.log("In netflix_cs.js chrome.runtime.onMessage.addListener");
+        console.log("In netflix_cs.js:" + request.message);
         if(request.message === "netflix_page_reloaded") {
             if(recording){
                 stopRecording();
@@ -310,6 +317,11 @@ chrome.runtime.onMessage.addListener(
 );
 
 if ( document.URL.includes('netflix.com/watch') ) {
+
+    chrome.runtime.sendMessage({ greeting: 'hello '}, response => 
+            console.log(response.farewell)
+        );
+
     document.addEventListener("DOMContentLoaded", function(event) {
         console.log("b4 startRecording")
         startRecording();

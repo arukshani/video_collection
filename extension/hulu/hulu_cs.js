@@ -131,6 +131,7 @@ myTabID = getTabID();
 
 chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {
+        console.log("HELLLOoooooooo" + request.message);
         if(request.message === "hulu_page_reloaded") {
             pageChange(document.URL);
         } else if(request.message === "general_page_reloaded") {

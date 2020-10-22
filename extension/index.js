@@ -3,6 +3,8 @@
  *  + All implemented for now
  *  + Check corner cases
  */
+var iDiv = document.createElement('div');
+iDiv.id = 'latest_stats';
 
 var open_netflix_tabs = {};
 var netflix_dataset = {};
@@ -21,6 +23,8 @@ var interrupted_sessions =[];
 
 var manifestData = chrome.runtime.getManifest();
 var extensionVersion = manifestData.version;
+
+// console = chrome.extension.getBackgroundPage().console;
 
 var requests_tabs_data = {};
 
@@ -121,8 +125,7 @@ function uploadOldSessions() {
  * TODO: capture closing of browser to save state
  */
 
-var iDiv = document.createElement('div');
-iDiv.id = 'latest_stats';
+
 document.getElementsByTagName('body')[0].appendChild(iDiv);
 
 function saveParsedEntries() {
@@ -254,6 +257,7 @@ function uploadRequestsHistory(tabId) {
 
 
 function finishedRecordingNetflix(movie_id, end_ts, tabId) {
+    console.log("finishedRecordingNetflix");
     movie = netflix_dataset[movie_id];
     if (movie === undefined || movie === null) {
         console.error("No movie found: " + movie_id);
@@ -346,17 +350,21 @@ function finishedRecordingHulu(movie_id, end_ts, tabId) {
 
 chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {
-        console.log("HELLLOoooooooo" + request.message);
+        // chrome.extension.getBackgroundPage().console.log(sender.tab ?
+        //     "from a content script:" + sender.tab.url :
+        //     "from the extension");
+        //     chrome.extension.getBackgroundPage().console.log("HELLLOoooooooo" + request.message);
         if (request.message === "netflix_stats") {
+            // console.log("Netflix stats");
             var movie = netflix_dataset[request.movie_id];
             if(movie.values.length > 0 &&
                movie.values[movie.last_valid].val === request.domString) {
                 movie.values.push({ts: request.ts, val: "--"});
-                //console.log("Not recording as it is the same as before");
+                // console.log("Not recording as it is the same as before");
             } else{
                 movie.values.push({ts: request.ts, val: request.domString});
                 movie.last_valid = movie.values.length - 1;
-                //console.log("Recorded\n"+JSON.stringify(movie.values[movie.last_valid]));
+                // console.log("Recorded\n"+JSON.stringify(movie.values[movie.last_valid]));
             }
         }
         else if (request.message === "youtube_stats") {
@@ -505,7 +513,7 @@ chrome.runtime.onMessage.addListener(
         } else if (request.message === "get_tab_id") {
             sendResponse(sender.tab.id);
         }
-        sendResponse({});
+        sendResponse({ message: "hi" });
         return true;
     }
 );
