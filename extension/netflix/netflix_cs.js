@@ -148,8 +148,8 @@ function startTracking(className, period, periodAfter, ts) {
         elem = document.getElementsByClassName('player-info');
         if (elem.length != 0) {
             console.log(elem);
-            // elem[0].style.display = 'none';       // Hide the text
-            // element.style.visibility = 'hidden';      // Hide
+            elem[0].style.display = 'none';       // Hide the text
+            element.style.visibility = 'hidden';      // Hide
 
             // The movie ID had not been extracted as it was clicked from the browser
             if(currentMovie == null) {
