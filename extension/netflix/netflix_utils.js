@@ -176,8 +176,8 @@ function parseNetflixEntry(movie, end_ts) {
     for (entryKey in movie.values) {
         if (movie.values[entryKey].val === "--") continue;
         newEntry = createEntry(movie.values[entryKey]);
-        //obj.vals.push(newEntry); //if you want to push a longer entry
-        obj.vals.push(creteShorterEntry(newEntry, lastSeen));
+        obj.vals.push(newEntry); //if you want to push a longer entry
+        // obj.vals.push(creteShorterEntry(newEntry, lastSeen));
     }
     return JSON.stringify(obj);
 }
