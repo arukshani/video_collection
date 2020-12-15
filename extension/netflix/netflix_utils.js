@@ -122,7 +122,8 @@ function createEntry(stringEntry) {
         // console.log("keyval>" + keyval);
         // console.log("keyval[1]>" + keyval[1]);
         // newEntry[key] = keyval[1].trim();
-        newEntry[key] = lines[lineKey].split(key+": ");
+        keyval = lines[lineKey].split(key+": ");
+        newEntry[key] = keyval[1].trim();
 
         /***********************************************************************/
         if (key === 'Playing bitrate (a/v)') {
