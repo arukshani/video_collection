@@ -95,32 +95,34 @@ function StatsEntry() {
 function createEntry(stringEntry) {
     function findkey(line) {
         for (i in shortenedNetflixKeys)
-            if (line.includes(i))
+            if (i != "ts" && line.includes(i))
                 return i;
         
         return "";
     }
     var newEntry = new StatsEntry();
     newEntry.ts = stringEntry.ts;
+    // console.log("ts++++++++++++++++++++++++++>" + stringEntry.ts)
     var lines = stringEntry.val.split("\n");
     for (lineKey in lines) {
         if (lines[lineKey] === "" || lines[lineKey] === undefined) continue;
         var key = findkey(lines[lineKey]);
-        console.log("line>" + lines[lineKey])
-        console.log("key>" + key);
+        // console.log("line>" + lines[lineKey])
+        // console.log("key>" + key);
 
-        if (key === "ts") {
-            keyval = lines[lineKey].split(key+": ");
-            if (keyval[1] === undefined) {
-                keyval = lines[lineKey].split(key+":");
-            }
-        } else {
-            keyval = lines[lineKey].split(key+": ");
-        }
+        // if (key === "ts") {
+        //     keyval = lines[lineKey].split(key+": ");
+        //     if (keyval[1] === undefined) {
+        //         keyval = lines[lineKey].split(key+":");
+        //     }
+        // } else {
+        //     keyval = lines[lineKey].split(key+": ");
+        // }
 
-        console.log("keyval>" + keyval);
-        console.log("keyval[1]>" + keyval[1]);
-        newEntry[key] = keyval[1].trim();
+        // console.log("keyval>" + keyval);
+        // console.log("keyval[1]>" + keyval[1]);
+        // newEntry[key] = keyval[1].trim();
+        newEntry[key] = lines[lineKey].split(key+": ");
 
         /***********************************************************************/
         if (key === 'Playing bitrate (a/v)') {
